@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
++    _   _  _____ _      _     _____    _____ _   _  ___________ _____
++   | | | ||  ___| |    | |   |  _  |  |_   _| | | ||  ___| ___ \  ___|
++   | |_| || |__ | |    | |   | | | |    | | | |_| || |__ | |_/ / |__
++   |  _  ||  __|| |    | |   | | | |    | | |  _  ||  __||    /|  __|
++   | | | || |___| |____| |___\ \_/ /    | | | | | || |___| |\ \| |___
++   \_| |_/\____/\_____/\_____/\___/     \_/ \_| |_/\____/\_| \_\____/
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="[MAZ01001.github.io] Enigma machine encoder and decoder in HTML, JavaScript, and CSS">
+    <meta name="author" content="MAZ01001">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="../img/MAZ_logo.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png">
+    <link rel="manifest" href="../img/site.webmanifest">
+    <link rel="mask-icon" href="../img/safari-pinned-tab.svg" color="#ff9900">
+    <link rel="shortcut icon" href="../img/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="../img/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <title>Enigma</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="box">
+        <h1 id="title"><a href="https://en.wikipedia.org/wiki/Enigma_machine" target="_blank" rel="noopener noreferrer" title="Enigma [wiki]">Enigma</a></h1>
+        <br><br>
+        <div id="enigma_info">(1weels and 0plugs)</div>
+        <br>
+        <input id="enigma_counter" type="number" min="0" step="1" readonly title="turn counter of the enigma machine">
+        <br>
+        <div id="switch">
+            <span id="txt_decode">Decode</span>
+            <label class="switch"><input type="checkbox" checked id="toggle_en_decode"><span class="slider"></span></label>
+            <span id="txt_encode">Encode</span>
+        </div>
+        <br>
+        <div id="conversion">
+            <div id="input">
+                <div id="input_counter">(0)</div>
+                <textarea id="input_text" maxlength="1000" style="white-space: pre-wrap;" spellcheck="true" placeholder="text (can be unicode)" title="text (can be unicode)"></textarea>
+            </div>
+            <input type="button" id="enigma_convert_button" value="▶">
+            <div id="output">
+                <div id="output_counter">(0)</div>
+                <textarea id="output_text" maxlength="1000" style="white-space: pre-wrap;" readonly placeholder="output text" title="click to copy"></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="blurer">
+        <div id="edit_decode_machine">
+            <div id="edit_decode_section_copy_encoding" style="all:unset;">
+                <input type="button" id="edit_decode_copy_button" value="mirror encoding" title="copy the encoding-enigma">
+                <hr style="height:2px;border:none;background-color:#0F0F;">
+            </div>
+            <div id="edit_decode_section_load_file" style="all:unset;">
+                <hr style="height:2px;border:none;background-color:#0F0F;">
+                <label for="edit_decode_load_file" title="load a previously saved enigma">Select save file:</label>
+                <input type="file" id="edit_decode_load_file" accept=".enigma" title="load a previously saved enigma">
+            </div>
+            <div id="edit_decode_section_abort" style="all:unset;">
+                <hr style="height:2px;border:none;background-color:#0F0F;">
+                <input type="button" value="abort" id="edit_decode_abort" title="go back without changes">
+            </div>
+        </div>
+        <div id="edit_encode_machine">
+            <div id="edit_encode_section_save_file">
+                <label for="edit_encode_save_file" title="save current enigma to a file">Save current to file:</label>
+                <input type="button" value="save" id="edit_encode_save_file" title="save current enigma to a file">
+                <hr style="height:2px;border:none;background-color:#0F0F;">
+            </div>
+            <div id="edit_encode_section_create_new" style="all:unset;">
+                <div title="input any characters you whant the machine to support (no seperator - can be unicode)">Characters:</div>
+                <textarea id="edit_encode_input_chars" spellcheck="false" placeholder="new caracters - no seperator - can be unicode" title="input any characters you whant the machine to support (no seperator - can be unicode)"></textarea>
+                <br><br>
+                <label for="edit_encode_weels_num" title="the number of weels the machine should have (used only in one direction) [1~500]">Weels:</label>
+                <input type="number" id="edit_encode_weels_num" min="0" step="1" max="500" placeholder="Weels" title="the number of weels the machine should have (used only in one direction) [1~500]">
+                <br><br>
+                <label for="edit_encode_plugs_num" title="the number of plugs the machine should have [0~500]">Plugs:</label>
+                <input type="number" id="edit_encode_plugs_num" min="0" step="1" max="500" placeholder="Plugs" title="the number of plugs the machine should have [0~500]">
+                <br><br>
+                <input type="button" id="edit_encode_create_button" value="create" title="create new enigma with values above">
+            </div>
+            <div id="edit_encode_section_load_file" style="all:unset;">
+                <hr style="height:2px;border:none;background-color:#0F0F;">
+                <label for="edit_encode_load_file" title="load a previously saved enigma">Select save file:</label>
+                <input type="file" id="edit_encode_load_file" accept=".enigma" title="load a previously saved enigma">
+            </div>
+            <div id="edit_encode_section_abort" style="all:unset;">
+                <hr style="height:2px;border:none;background-color:#0F0F;">
+                <input type="button" value="abort" id="edit_encode_abort" title="go back without changes">
+            </div>
+        </div>
+    </div>
+    <div id="loader">
+        <div>
+            <svg width="100%" height="100%" viewBox="0 0 350 100">
+                <title>please wait...</title>
+                <rect x="0" y="0" width="100%" height="100%" style="fill: transparent;"/>
+                <g style="overflow:hidden;text-anchor: middle;">
+                    <defs>
+                        <mask id="textMask"><text style="fill: white;" x="175" y="55">please wait...</text></mask>
+                        <filter id="innerShadow" x="-15%" y="-15%" width="140%" height="140%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur"/>
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur2"/>
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur3"/>
+                            <feMerge result="blur">
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="blu2"/>
+                                <feMergeNode in="blur3"/>
+                            </feMerge>
+                            <feOffset in="blur" dx="0.7" dy="0.7"/>
+                        </filter>
+                    </defs>
+                    <g mask="url(#textMask)">
+                        <rect x="0" y="0" width="350" height="75" style="fill: black;"/>
+                        <text style="fill: #0f0f;filter: url(#innerShadow);" x="175" y="55">please wait...</text>
+                    </g>
+                </g>
+            </svg>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
